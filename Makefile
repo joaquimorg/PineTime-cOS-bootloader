@@ -2,7 +2,10 @@ PROJECT_NAME     := bootloader_pinetime-cos
 TARGETS          := bootloader_pinetime-cos
 OUTPUT_DIRECTORY := _build
 
-SDK_ROOT := /mnt/d/Work/PineTime/nRF5_SDK_17.1.0_ddde560
+NRFUTIL := d:/Work/Pinetime/nRF52832/nrfutil
+#SDK_ROOT := /mnt/d/Work/PineTime/nRF5_SDK_17.1.0_ddde560
+SDK_ROOT := d:/Work/PineTime/nRF5_SDK_17.1.0_ddde560
+
 PROJ_DIR := ./src
 
 $(OUTPUT_DIRECTORY)/bootloader_pinetime-cos.out: \

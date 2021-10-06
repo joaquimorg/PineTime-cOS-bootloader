@@ -317,7 +317,7 @@ static void hardware_init(void) {
     st7789_init();
 
     st7789_fill(0, 0, 240, 240, RGB2COLOR(0, 0, 0));
-    lcd_print(10, 40, "PINETIME BOOT", RGB2COLOR(255, 255, 255));
+    lcd_print(10, 40, "PINETIME COS", RGB2COLOR(255, 255, 255));
 
 
 }
