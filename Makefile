@@ -8,6 +8,11 @@ SDK_ROOT := d:/Work/PineTime/nRF5_SDK_17.1.0_ddde560
 
 PROJ_DIR := ./src
 
+SOFT_DEVICE := s112
+SOFT_DEVICE_HEX := s112_nrf52_7.2.0_softdevice.hex
+
+SOFT_DEVICE_UC := S112
+
 $(OUTPUT_DIRECTORY)/bootloader_pinetime-cos.out: \
   LINKER_SCRIPT  := secure_bootloader_gcc_nrf52.ld
 
@@ -92,7 +97,7 @@ SRC_FILES += \
 # Include folders common to all targets
 INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/crypto/backend/micro_ecc \
-  $(SDK_ROOT)/components/softdevice/s132/headers \
+  $(SDK_ROOT)/components/softdevice/$(SOFT_DEVICE)/headers \
   $(SDK_ROOT)/components/libraries/memobj \
   $(SDK_ROOT)/components/libraries/sha256 \
   $(SDK_ROOT)/components/libraries/crc32 \
@@ -107,7 +112,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/atomic \
   $(SDK_ROOT)/integration/nrfx \
   $(SDK_ROOT)/components/libraries/crypto/backend/cc310_bl \
-  $(SDK_ROOT)/components/softdevice/s132/headers/nrf52 \
+  $(SDK_ROOT)/components/softdevice/$(SOFT_DEVICE)/headers/nrf52 \
   $(SDK_ROOT)/components/libraries/log/src \
   $(SDK_ROOT)/components/libraries/bootloader/dfu \
   $(SDK_ROOT)/components/ble/common \
@@ -163,7 +168,7 @@ CFLAGS += -DNRF52_PAN_74
 CFLAGS += -DNRF_DFU_SETTINGS_VERSION=2
 CFLAGS += -DNRF_DFU_SVCI_ENABLED
 CFLAGS += -DNRF_SD_BLE_API_VERSION=7
-CFLAGS += -DS132
+CFLAGS += -D$(SOFT_DEVICE_UC)
 CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -DSVC_INTERFACE_CALL_AS_NORMAL_FUNCTION
 CFLAGS += -DuECC_ENABLE_VLI_API=0
@@ -196,7 +201,7 @@ ASMFLAGS += -DNRF52_PAN_74
 ASMFLAGS += -DNRF_DFU_SETTINGS_VERSION=2
 ASMFLAGS += -DNRF_DFU_SVCI_ENABLED
 ASMFLAGS += -DNRF_SD_BLE_API_VERSION=7
-ASMFLAGS += -DS132
+ASMFLAGS += -D$(SOFT_DEVICE_UC)
 ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DSVC_INTERFACE_CALL_AS_NORMAL_FUNCTION
 ASMFLAGS += -DuECC_ENABLE_VLI_API=0
@@ -233,7 +238,7 @@ help:
 	@echo following targets are available:
 	@echo		bootloader_pinetime-cos
 	@echo		softdevice - make .hex from softdevice and bootloader
-	@echo		sdk_config - starting external tool for editing sdk_config.h
+
 
 TEMPLATE_PATH := $(SDK_ROOT)/components/toolchain/gcc
 
@@ -242,9 +247,13 @@ include $(TEMPLATE_PATH)/Makefile.common
 $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
 softdevice:
-
-	python scripts/hexmerge.py --overlap=replace $(SDK_ROOT)/components/softdevice/s132/hex/s132_nrf52_7.2.0_softdevice.hex $(OUTPUT_DIRECTORY)/$(PROJECT_NAME).hex -o $(OUTPUT_DIRECTORY)/$(PROJECT_NAME).sd.hex
+	python scripts/hexmerge.py --overlap=replace $(SDK_ROOT)/components/softdevice/$(SOFT_DEVICE)/hex/$(SOFT_DEVICE_HEX) $(OUTPUT_DIRECTORY)/$(PROJECT_NAME).hex -o $(OUTPUT_DIRECTORY)/$(PROJECT_NAME).sd.hex
 	arm-none-eabi-gdb.exe --batch -ex="target extended-remote 192.168.1.20:3333" -ex "load" -ex "monitor reset" $(OUTPUT_DIRECTORY)/$(PROJECT_NAME).sd.hex
+
+prog: default
+	@echo	** Program Pinetime with $(OUTPUT_DIRECTORY)/$(PROJECT_NAME).app.hex
+	@arm-none-eabi-gdb.exe --batch -ex="target extended-remote 192.168.1.20:3333" -ex "load" -ex "monitor reset" $(OUTPUT_DIRECTORY)/$(PROJECT_NAME).hex
+
 
 #.PHONY: flash flash_softdevice erase
 
@@ -263,7 +272,3 @@ softdevice:
 #erase:
 #	nrfjprog -f nrf52 --eraseall
 
-SDK_CONFIG_FILE := $(PROJ_DIR)/config/sdk_config.h
-CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar
-sdk_config:
-	java -jar $(CMSIS_CONFIG_TOOL) $(SDK_CONFIG_FILE)

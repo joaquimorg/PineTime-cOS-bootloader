@@ -16,6 +16,8 @@
 #define SPI_MOSI 3
 #define SPI_MISO 4
 
+#define BUTTON_PULL    NRF_GPIO_PIN_PULLUP
+
 // ------------------------------------------------------------------------------------------------------
 // LCD
 
@@ -46,11 +48,11 @@ const unsigned short LCD_FONT_3X5[] = { // from 33 up to 127
     PACK_5_TO_16( __X , X_X , _X_ , X_X , __X ),
     PACK_5_TO_16( XXX , XXX , _X_ , XXX , XXX ),
 
-    PACK_5_TO_16( ___ , ___ , __X , ___ , X__ ), // :;<=>
+    PACK_5_TO_16( ___ , _X_ , __X , ___ , X__ ), // :;<=>
     PACK_5_TO_16( _X_ , _X_ , _X_ , XXX , _X_ ),
-    PACK_5_TO_16( ___ , ___ , X__ , ___ , __X ),
-    PACK_5_TO_16( _X_ , _X_ , _X_ , XXX , _X_ ),
-    PACK_5_TO_16( ___ , X__ , __X , ___ , X__ ),
+    PACK_5_TO_16( ___ , _X_ , X__ , ___ , __X ),
+    PACK_5_TO_16( _X_ , ___ , _X_ , XXX , _X_ ),
+    PACK_5_TO_16( ___ , _X_ , __X , ___ , X__ ),
 
     PACK_5_TO_16( _X_ , ___ , _X_ , XX_ , _XX ), // ?@ABC
     PACK_5_TO_16( X_X , _X_ , X_X , X_X , X__ ), // @ is used as +
@@ -307,7 +309,7 @@ void lcd_print(int x1, int y1, char *ch, uint16_t color) {
 static void hardware_init(void) {
 
     // Button Enable
-    nrf_gpio_pin_set(KEY_ENABLE);
+    nrf_gpio_pin_clear(KEY_ENABLE);
     nrf_gpio_cfg_output(KEY_ENABLE);
 
     // Backlight

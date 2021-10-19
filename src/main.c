@@ -53,15 +53,10 @@ static void dfu_observer(nrf_dfu_evt_type_t evt_type)
             lcd_print(10, 140, "DFU ERROR ", RGB2COLOR(255, 0, 0));
             break;
         case NRF_DFU_EVT_DFU_INITIALIZED:
-            //bsp_board_init(BSP_INIT_LEDS);
-            //bsp_board_led_on(BSP_BOARD_LED_0);
-            //bsp_board_led_on(BSP_BOARD_LED_1);
-            //bsp_board_led_off(BSP_BOARD_LED_2);
+            lcd_print(10, 80, "FIRMWARE", RGB2COLOR(255, 0, 0));
             lcd_print(10, 140, "DFU READY ", RGB2COLOR(0, 0, 255));
             break;
         case NRF_DFU_EVT_TRANSPORT_ACTIVATED:
-            //bsp_board_led_off(BSP_BOARD_LED_1);
-            //bsp_board_led_on(BSP_BOARD_LED_2);
             lcd_print(10, 140, "DFU ACTIVE", RGB2COLOR(0, 255, 0));
             break;
         case NRF_DFU_EVT_DFU_STARTED:
@@ -78,9 +73,17 @@ int main(void)
 {
     uint32_t ret_val;
 
-    hardware_init();
+    hardware_init();    
 
-    lcd_print(10, 80, "BOOTING", RGB2COLOR(255, 255, 0));
+    lcd_print(10, 80, "KEY DFU\\", RGB2COLOR(255, 0, 0));
+    nrf_delay_ms(1000);    
+
+    /*if (nrf_gpio_pin_read(KEY_ACTION)) {
+    
+    } 
+
+    nrf_delay_ms(500);*/
+
     // Must happen before flash protection is applied, since it edits a protected page.
     nrf_bootloader_mbr_addrs_populate();
 
@@ -95,6 +98,7 @@ int main(void)
     //NRF_LOG_DEFAULT_BACKENDS_INIT();
 
     //NRF_LOG_INFO("Inside main");
+    lcd_print(10, 80, "BOOTING;", RGB2COLOR(255, 255, 0));
     ret_val = nrf_bootloader_init(dfu_observer);
     APP_ERROR_CHECK(ret_val);
 
