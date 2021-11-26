@@ -11,6 +11,15 @@ MEMORY
   bootloader_settings_page (r) : ORIGIN = 0x0007F000, LENGTH = 0x1000
   uicr_mbr_params_page (r) : ORIGIN = 0x10001018, LENGTH = 0x4
   mbr_params_page (r) : ORIGIN = 0x0007E000, LENGTH = 0x1000
+  NOINIT (rwx) :  ORIGIN = 0x20010000 - 0x08, LENGTH = 0x8
+}
+
+SECTIONS
+{
+  .noinit (NOLOAD) :
+  {
+    
+  } > NOINIT
 }
 
 SECTIONS

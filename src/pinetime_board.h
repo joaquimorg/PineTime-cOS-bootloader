@@ -55,9 +55,9 @@ const unsigned short LCD_FONT_3X5[] = { // from 33 up to 127
     PACK_5_TO_16( ___ , _X_ , __X , ___ , X__ ),
 
     PACK_5_TO_16( _X_ , ___ , _X_ , XX_ , _XX ), // ?@ABC
-    PACK_5_TO_16( X_X , _X_ , X_X , X_X , X__ ), // @ is used as +
+    PACK_5_TO_16( X_X , ___ , X_X , X_X , X__ ), // @ is used as -
     PACK_5_TO_16( __X , XXX , XXX , XX_ , X__ ),
-    PACK_5_TO_16( ___ , _X_ , X_X , X_X , X__ ),
+    PACK_5_TO_16( ___ , ___ , X_X , X_X , X__ ),
     PACK_5_TO_16( _X_ , ___ , X_X , XX_ , _XX ),
 
     PACK_5_TO_16( XX_ , XXX , XXX , _XX , X_X ), // DEFGH
@@ -319,7 +319,7 @@ static void hardware_init(void) {
     st7789_init();
 
     st7789_fill(0, 0, 240, 240, RGB2COLOR(0, 0, 0));
-    lcd_print(10, 40, "PINETIME COS", RGB2COLOR(255, 255, 255));
+    lcd_print(10, 40, "MY@TIME", RGB2COLOR(255, 255, 255));
 
 
 }

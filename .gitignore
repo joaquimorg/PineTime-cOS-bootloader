@@ -9,6 +9,7 @@ _build
 *.bin
 *.map
 *.out
+src/dfu_public_key.c
 
 # Linux
 **/.directory
