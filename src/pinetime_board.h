@@ -266,7 +266,7 @@ void st7789_pixel(uint16_t x1, uint16_t y1, uint16_t color) {
     uint8_t buffer[(CHAR_ZOOM*CHAR_ZOOM) * 2];
     uint8_t buffpos = 0;
     st7789_set_window(x1, y1, CHAR_ZOOM, CHAR_ZOOM);    
-    for (uint8_t size; size < CHAR_ZOOM*CHAR_ZOOM; size++) {
+    for (uint8_t size = 0; size < CHAR_ZOOM*CHAR_ZOOM; size++) {
         buffer[buffpos++] = color >> 8;
         buffer[buffpos++] = color & 0xff;
     }

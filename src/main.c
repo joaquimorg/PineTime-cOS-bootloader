@@ -50,17 +50,17 @@ static void dfu_observer(nrf_dfu_evt_type_t evt_type)
     {
         case NRF_DFU_EVT_DFU_FAILED:
         case NRF_DFU_EVT_DFU_ABORTED:
-            lcd_print(10, 140, "DFU ERROR ", RGB2COLOR(255, 0, 0));
+            lcd_print(10, 140, "DFU ERROR", RGB2COLOR(255, 0, 0));
             break;
         case NRF_DFU_EVT_DFU_INITIALIZED:
-            lcd_print(10, 80, "FIRMWARE", RGB2COLOR(255, 0, 0));
-            lcd_print(10, 140, "DFU READY ", RGB2COLOR(0, 0, 255));
+            lcd_print(10, 80, "FIRMWARE", RGB2COLOR(255, 255, 0));
+            lcd_print(10, 140, "DFU READY", RGB2COLOR(0, 0, 255));
             break;
         case NRF_DFU_EVT_TRANSPORT_ACTIVATED:
-            lcd_print(10, 140, "DFU ACTIVE", RGB2COLOR(0, 255, 0));
+            lcd_print(10, 140, "DFU LOAD>", RGB2COLOR(0, 255, 0));
             break;
         case NRF_DFU_EVT_DFU_STARTED:
-            lcd_print(10, 140, "DFU START ", RGB2COLOR(0, 255, 0));
+            lcd_print(10, 140, "DFU START", RGB2COLOR(0, 255, 0));
             break;
         default:
             break;
@@ -75,7 +75,7 @@ int main(void)
 
     hardware_init();    
 
-    lcd_print(10, 80, "KEY DFU\\", RGB2COLOR(255, 0, 0));
+    lcd_print(10, 80, "DFU\\", RGB2COLOR(255, 0, 0));
     nrf_delay_ms(1000);    
 
     /*if (nrf_gpio_pin_read(KEY_ACTION)) {
@@ -98,7 +98,9 @@ int main(void)
     //NRF_LOG_DEFAULT_BACKENDS_INIT();
 
     //NRF_LOG_INFO("Inside main");
+    //st7789_fill(0, 0, 240, 240, RGB2COLOR(0, 0, 0));
     lcd_print(10, 80, "BOOTING;", RGB2COLOR(255, 255, 0));
+    
     ret_val = nrf_bootloader_init(dfu_observer);
     APP_ERROR_CHECK(ret_val);
 

@@ -152,12 +152,13 @@ LIB_FILES += \
   $(SDK_ROOT)/external/micro-ecc/nrf52hf_armgcc/armgcc/micro_ecc_lib_nrf52.a \
 
 # Optimization flags
-OPT = -Os -g3
+OPT = -Os -g3 -fno-exceptions -fno-non-call-exceptions
 # Uncomment the line below to enable link time optimization
 OPT += -flto
 
 # C flags common to all targets
 CFLAGS += $(OPT)
+CFLAGS += -DCFG_DEBUG=0
 CFLAGS += -DBLE_STACK_SUPPORT_REQD
 CFLAGS += -DBOARD_PCA10040
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
